@@ -140,14 +140,15 @@ def main() -> None:
 
 
 def run_agi():
-    match selected_lang:
-        case "En":
-            st.session_state.locale = en
-        case "Ru":
-            st.session_state.locale = ru
-        case _:
-            st.session_state.locale = en
+    if selected_lang == "En":
+        st.session_state.locale = en
+    elif selected_lang == "Ru":
+        st.session_state.locale = ru
+    else:
+        st.session_state.locale = en
+
     st.markdown(f"<h1 style='text-align: center;'>{st.session_state.locale.title}</h1>", unsafe_allow_html=True)
+    
     selected_footer = option_menu(
         menu_title=None,
         options=[
@@ -161,16 +162,17 @@ def run_agi():
         orientation="horizontal",
         styles=FOOTER_STYLES
     )
-    match selected_footer:
-        case st.session_state.locale.footer_option0:
-            main()
-        case st.session_state.locale.footer_option1:
-            st.image(f"{img_dir}/{get_random_img(get_files_in_dir(img_dir))}")
-            show_info(tg_svg)
-        case st.session_state.locale.footer_option2:
-            show_donates()
-        case _:
-            show_info(tg_svg)
+
+    if selected_footer == st.session_state.locale.footer_option0:
+        main()
+    elif selected_footer == st.session_state.locale.footer_option1:
+        st.image(f"{img_dir}/{get_random_img(get_files_in_dir(img_dir))}")
+        show_info(tg_svg)
+    elif selected_footer == st.session_state.locale.footer_option2:
+        show_donates()
+    else:
+        show_info(tg_svg)
+
 
 
 if __name__ == "__main__":
